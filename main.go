@@ -109,11 +109,9 @@ func confirmAndInitRepos(repos []Repo) {
 
 	fmt.Printf("Initializing %d repositories as %s...\n", len(repos), visibilityStr)
 
-	// Set up channel to listen for interrupt signal
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt, syscall.SIGTERM)
 
-	// Create a done channel to signal completion
 	done := make(chan bool)
 
 	go func() {
@@ -148,7 +146,5 @@ func runRadInit(path, name string) error {
 
 	cmd := exec.Command("rad", "init", "--name", name, "--description", "", visibilityFlag, "--no-confirm")
 	cmd.Dir = path
-	// cmd.Stdout = os.Stdout
-	// cmd.Stderr = os.Stderr
 	return cmd.Run()
 }
