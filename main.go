@@ -8,6 +8,7 @@ import (
 	"os/signal"
 	"path/filepath"
 	"syscall"
+	"time"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/fatih/color"
@@ -31,11 +32,22 @@ func main() {
 
 func findGitRepos(root string) []Repo {
 	var repos []Repo
+	var scannedDirs int
+	lastUpdateTime := time.Now()
 
 	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
+
+		scannedDirs++
+
+		// Update progress every second
+		if time.Since(lastUpdateTime) > time.Second {
+			fmt.Printf("\rScanned %d directories...", scannedDirs)
+			lastUpdateTime = time.Now()
+		}
+
 		if info.IsDir() && info.Name() == ".git" {
 			repoPath := filepath.Dir(path)
 			repos = append(repos, Repo{
@@ -46,6 +58,9 @@ func findGitRepos(root string) []Repo {
 		}
 		return nil
 	})
+
+	// Clear the progress line and print final count
+	fmt.Printf("\rScanned %d directories. Found %d Git repositories.\n", scannedDirs, len(repos))
 
 	if err != nil {
 		fmt.Printf("Error walking the path %v: %v\n", root, err)
