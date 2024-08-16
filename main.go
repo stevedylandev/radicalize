@@ -8,10 +8,8 @@ import (
 	"os/signal"
 	"path/filepath"
 	"syscall"
-	"time"
 
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/briandowns/spinner"
 	"github.com/fatih/color"
 )
 
@@ -95,13 +93,11 @@ func confirmAndInitRepos(repos []Repo) {
 	survey.AskOne(prompt, &confirm)
 
 	if !confirm {
-		fmt.Println("Operation cancelled.")
+		fmt.Println("Radicalization cancelled.")
 		return
 	}
 
-	s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-	s.Prefix = "Initializing repositories "
-	s.Start()
+	fmt.Printf("Initializing %d repositories as %s...\n", len(repos), visibilityStr)
 
 	// Set up channel to listen for interrupt signal
 	interrupt := make(chan os.Signal, 1)
@@ -118,21 +114,20 @@ func confirmAndInitRepos(repos []Repo) {
 				done <- true
 				return
 			default:
+				fmt.Printf("Initializing %s (%d/%d)...\n", repo.Name, i+1, len(repos))
 				err := runRadInit(repo.Path, repo.Name)
 				if err != nil {
 					color.Red("Error initializing %s: %v\n", repo.Name, err)
 				} else {
 					color.Green("Initialized %s as %s\n", repo.Name, visibilityStr)
 				}
-				s.Suffix = fmt.Sprintf(" (%d/%d)", i+1, len(repos))
 			}
 		}
 		done <- true
 	}()
 
 	<-done
-	s.Stop()
-	fmt.Println("Initialization process completed or interrupted.")
+	fmt.Println("Radicalization Complete")
 }
 
 func runRadInit(path, name string) error {
