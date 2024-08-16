@@ -8,7 +8,6 @@ import (
 	"os/signal"
 	"path/filepath"
 	"syscall"
-	"time"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/fatih/color"
@@ -33,38 +32,34 @@ func main() {
 func findGitRepos(root string) []Repo {
 	var repos []Repo
 	var scannedDirs int
-	lastUpdateTime := time.Now()
 
-	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
+	entries, err := os.ReadDir(root)
+	if err != nil {
+		fmt.Printf("Error reading directory %v: %v\n", root, err)
+		return repos
+	}
+
+	for _, entry := range entries {
+		if !entry.IsDir() {
+			continue
 		}
 
 		scannedDirs++
+		fmt.Printf("\rScanned %d directories...", scannedDirs)
 
-		// Update progress every second
-		if time.Since(lastUpdateTime) > time.Second {
-			fmt.Printf("\rScanned %d directories...", scannedDirs)
-			lastUpdateTime = time.Now()
-		}
+		dirPath := filepath.Join(root, entry.Name())
+		gitDir := filepath.Join(dirPath, ".git")
 
-		if info.IsDir() && info.Name() == ".git" {
-			repoPath := filepath.Dir(path)
+		if _, err := os.Stat(gitDir); err == nil {
 			repos = append(repos, Repo{
-				Path: repoPath,
-				Name: filepath.Base(repoPath),
+				Path: dirPath,
+				Name: entry.Name(),
 			})
-			return filepath.SkipDir
 		}
-		return nil
-	})
+	}
 
 	// Clear the progress line and print final count
 	fmt.Printf("\rScanned %d directories. Found %d Git repositories.\n", scannedDirs, len(repos))
-
-	if err != nil {
-		fmt.Printf("Error walking the path %v: %v\n", root, err)
-	}
 
 	return repos
 }
