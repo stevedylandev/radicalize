@@ -1,7 +1,9 @@
 # Radicalize
 
-<div>
-<img src="https://dweb.mypinata.cloud/ipfs/QmdoHJ7VUuiihGdueJzNfu9yEVoSCoasAp19tZ2UcY2RkJ" alt="radicle logo" style={{mx: "auto"}} />
+<div style={{
+  margin-x: "auto",
+}}>
+<img style={{width: "300px"}} src="https://dweb.mypinata.cloud/ipfs/QmdoHJ7VUuiihGdueJzNfu9yEVoSCoasAp19tZ2UcY2RkJ" alt="radicle logo" />
 </div>
 
 A script that helps clone existing git repos to [Radicle](https://radicle.xyz).
