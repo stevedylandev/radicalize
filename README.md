@@ -2,6 +2,7 @@
 
 <div style={{
   margin-x: "auto",
+  width: "100%"
 }}>
 <img style={{width: "300px"}} src="https://dweb.mypinata.cloud/ipfs/QmdoHJ7VUuiihGdueJzNfu9yEVoSCoasAp19tZ2UcY2RkJ" alt="radicle logo" />
 </div>
