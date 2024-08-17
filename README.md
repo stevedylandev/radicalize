@@ -24,6 +24,12 @@ rad node start
 
 This script is written in Go so there are a few install options.
 
+### Install directly with Go
+Have Go installed and run this command.
+```
+go install github.com/stevedylandev/radicalize@latest
+```
+
 ### Clone and Build with Go
 For this method simply clone the repo, build, and install with Go
 ```
