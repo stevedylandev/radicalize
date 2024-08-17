@@ -24,6 +24,11 @@ rad node start
 
 This script is written in Go so there are a few install options.
 
+### Install with Homebrew
+```
+brew install stevedylandev/radicalize/radicalize
+```
+
 ### Install directly with Go
 Have Go installed and run this command.
 ```
@@ -39,10 +44,16 @@ go build
 go install .
 ```
 
-### Install with Homebrew
-
-TBD
-
 ## Usage
 
 To start backing up your repos simply run the command `radicalize` in the parent directory of all your projects. This will creep through all directories for .git repos on a surface level, so if you have sub directories you will want to navigate to those separately. After finding all git repos you can select which ones you would like to init to your Radicle node. Once you have confirmed the selection it will work through each repo and initialize it.
+
+![radicalize gif](https://dweb.mypinata.cloud/ipfs/QmXog19G7QvqHQUMH4R6aCaq8J9qfKAU9ethr51PUjtKjM)
+
+### Private Repos
+
+By default the program will make repos public, however you can pass in the `--private` flag so all selected repos will be private instead
+
+```
+radicalize --private
+```
