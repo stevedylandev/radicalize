@@ -66,4 +66,4 @@ radicalize local --private
 
 The CLI can also pull the latest 100 repos from any given user or organization on GitHub, clone them, and initalize them locally as well. Run `radicalize remote` which will then prompt you for the username or org name to search. Once provided it will put the repos into a selection list where you can start typing the name as well as scroll through it. Once all are selected it will begin the process of cloning and initalizing.
 
-![radicalize remote gif](https://dweb.mypinata.cloud/ipfs/Qmb4V8EjtZVbkL6UHZipMh2BvKVcqam2tvuiDamYSeNyC8)
+![radicalize remote gif](https://dweb.mypinata.cloud/ipfs/QmdErhQsJAshuTqaVPjPZKaxBDdwmzuB4JsVUw7zpRVbQi)
