@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"os"
 	"os/exec"
@@ -16,15 +15,10 @@ type Repo struct {
 	Name string
 }
 
-var isPrivate bool
-
-func LocalClone() error {
-	flag.BoolVar(&isPrivate, "private", false, "Initialize repositories as private")
-	flag.Parse()
-
+func LocalClone(private bool) error {
 	repos := findGitRepos(".")
 	selectedRepos := selectLocalRepos(repos)
-	confirmAndInitRepos(selectedRepos)
+	confirmAndInitRepos(selectedRepos, private)
 	return nil
 }
 
@@ -88,9 +82,9 @@ func selectLocalRepos(repos []Repo) []Repo {
 	return selectedRepos
 }
 
-func confirmAndInitRepos(repos []Repo) {
+func confirmAndInitRepos(repos []Repo, private bool) {
 	visibilityStr := "public"
-	if isPrivate {
+	if private {
 		visibilityStr = "private"
 	}
 
@@ -109,7 +103,7 @@ func confirmAndInitRepos(repos []Repo) {
 
 	for i, repo := range repos {
 		fmt.Printf("Initializing %s (%d/%d)...\n", repo.Name, i+1, len(repos))
-		err := runRadInit(repo.Path, repo.Name)
+		err := runRadInit(repo.Path, repo.Name, private)
 		if err != nil {
 			color.Red("Error initializing %s: %v\n", repo.Name, err)
 		} else {
@@ -120,9 +114,9 @@ func confirmAndInitRepos(repos []Repo) {
 	fmt.Println("Radicalization Complete")
 }
 
-func runRadInit(path, name string) error {
+func runRadInit(path, name string, private bool) error {
 	visibilityFlag := "--public"
-	if isPrivate {
+	if private {
 		visibilityFlag = "--private"
 	}
 

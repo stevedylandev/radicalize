@@ -46,14 +46,20 @@ go install .
 
 ## Usage
 
-To start backing up your repos simply run the command `radicalize` in the parent directory of all your projects. This will creep through all directories for .git repos on a surface level, so if you have sub directories you will want to navigate to those separately. After finding all git repos you can select which ones you would like to init to your Radicle node. Once you have confirmed the selection it will work through each repo and initialize it.
+This CLI (`radicalize`) has two commands:
+
+### `local`
+
+To start backing up your local repos simply run the command `radicalize` in the parent directory of all your projects. This will creep through all directories for .git repos on a surface level, so if you have sub directories you will want to navigate to those separately. After finding all git repos you can select which ones you would like to init to your Radicle node. Once you have confirmed the selection it will work through each repo and initialize it.
 
 ![radicalize gif](https://dweb.mypinata.cloud/ipfs/QmbZtL6AojCedVNam2WMTSt6amdegzcc1h6RApTpFGTYgt)
 
-### Private Repos
+**Private Repos**
 
 By default the program will make repos public, however you can pass in the `--private` flag so all selected repos will be private instead
 
 ```
-radicalize --private
+radicalize local --private
 ```
+
+### `remote`
