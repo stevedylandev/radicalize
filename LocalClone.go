@@ -23,7 +23,7 @@ func LocalClone() error {
 	flag.Parse()
 
 	repos := findGitRepos(".")
-	selectedRepos := selectRepos(repos)
+	selectedRepos := selectLocalRepos(repos)
 	confirmAndInitRepos(selectedRepos)
 	return nil
 }
@@ -62,7 +62,7 @@ func findGitRepos(root string) []Repo {
 	return repos
 }
 
-func selectRepos(repos []Repo) []Repo {
+func selectLocalRepos(repos []Repo) []Repo {
 	var options []string
 	for _, repo := range repos {
 		options = append(options, repo.Name)

@@ -25,7 +25,7 @@ func RemoteClone() error {
 	}
 	input = strings.TrimSuffix(input, "\n")
 
-	apiURL := fmt.Sprintf("https://api.github.com/users/%s/repos?sort=created", input)
+	apiURL := fmt.Sprintf("https://api.github.com/users/%s/repos?sort=created&per_page=100", input)
 
 	response, err := http.Get(apiURL)
 	if err != nil {
@@ -47,13 +47,13 @@ func RemoteClone() error {
 		return err
 	}
 
-	selectedRepos := selectNewRepos(repos)
+	selectedRepos := selectRemoteRepos(repos)
 	confirmAndCloneRepos(selectedRepos)
 
 	return nil
 }
 
-func selectNewRepos(repos []Repository) []Repository {
+func selectRemoteRepos(repos []Repository) []Repository {
 	var options []string
 	for _, repo := range repos {
 		options = append(options, repo.Name)
