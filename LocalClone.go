@@ -5,9 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"os/signal"
 	"path/filepath"
-	"syscall"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/fatih/color"
@@ -59,7 +57,6 @@ func findGitRepos(root string) []Repo {
 		}
 	}
 
-	// Clear the progress line and print final count
 	fmt.Printf("\rScanned %d directories. Found %d Git repositories.\n", scannedDirs, len(repos))
 
 	return repos
@@ -110,32 +107,16 @@ func confirmAndInitRepos(repos []Repo) {
 
 	fmt.Printf("Initializing %d repositories as %s...\n", len(repos), visibilityStr)
 
-	interrupt := make(chan os.Signal, 1)
-	signal.Notify(interrupt, os.Interrupt, syscall.SIGTERM)
-
-	done := make(chan bool)
-
-	go func() {
-		for i, repo := range repos {
-			select {
-			case <-interrupt:
-				fmt.Println("\nInterrupted. Stopping initialization process.")
-				done <- true
-				return
-			default:
-				fmt.Printf("Initializing %s (%d/%d)...\n", repo.Name, i+1, len(repos))
-				err := runRadInit(repo.Path, repo.Name)
-				if err != nil {
-					color.Red("Error initializing %s: %v\n", repo.Name, err)
-				} else {
-					color.Green("Initialized %s as %s\n", repo.Name, visibilityStr)
-				}
-			}
+	for i, repo := range repos {
+		fmt.Printf("Initializing %s (%d/%d)...\n", repo.Name, i+1, len(repos))
+		err := runRadInit(repo.Path, repo.Name)
+		if err != nil {
+			color.Red("Error initializing %s: %v\n", repo.Name, err)
+		} else {
+			color.Green("Initialized %s as %s\n", repo.Name, visibilityStr)
 		}
-		done <- true
-	}()
+	}
 
-	<-done
 	fmt.Println("Radicalization Complete")
 }
 
